@@ -265,12 +265,33 @@ textarea {
 
 .danger-zone {
   border-color: #fecaca;
+  gap: 12px;
   margin-top: 18px;
 }
 
-.danger-zone h2 {
+.danger-toggle {
+  align-items: center;
+  background: transparent;
+  border: 0;
   color: #991b1b;
-  margin-top: 0;
+  display: flex;
+  font-weight: 750;
+  justify-content: space-between;
+  min-height: 34px;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.danger-toggle span:last-child {
+  color: #6b7280;
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+
+.delete-account-form {
+  display: grid;
+  gap: 14px;
 }
 
 .auth-links,

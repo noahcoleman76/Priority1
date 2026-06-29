@@ -19,6 +19,7 @@ export const SettingsPage = () => {
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteConfirm, setDeleteConfirm] = useState("");
   const [deleteError, setDeleteError] = useState("");
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -130,35 +131,45 @@ export const SettingsPage = () => {
             Save settings
           </button>
         </form>
-        <form className="settings-form danger-zone" onSubmit={deleteAccount}>
-          <div>
-            <h2>Delete account</h2>
-            <p className="muted">
-              Permanently deletes your account, categories, active tasks, and completed tasks.
-            </p>
-          </div>
-          <label>
-            Current password
-            <input
-              value={deletePassword}
-              onChange={(event) => setDeletePassword(event.target.value)}
-              type="password"
-              required
-            />
-          </label>
-          <label>
-            Type DELETE
-            <input
-              value={deleteConfirm}
-              onChange={(event) => setDeleteConfirm(event.target.value)}
-              required
-            />
-          </label>
-          {deleteError && <p className="error">{deleteError}</p>}
-          <button className="danger-button" type="submit">
-            Delete account
+        <section className="settings-form danger-zone">
+          <button
+            className="danger-toggle"
+            type="button"
+            onClick={() => setDeleteOpen((value) => !value)}
+            aria-expanded={deleteOpen}
+          >
+            <span>Delete account</span>
+            <span>{deleteOpen ? "Hide" : "Show"}</span>
           </button>
-        </form>
+          {deleteOpen && (
+            <form className="delete-account-form" onSubmit={deleteAccount}>
+              <p className="muted">
+                Permanently deletes your account, categories, active tasks, and completed tasks.
+              </p>
+              <label>
+                Current password
+                <input
+                  value={deletePassword}
+                  onChange={(event) => setDeletePassword(event.target.value)}
+                  type="password"
+                  required
+                />
+              </label>
+              <label>
+                Type DELETE
+                <input
+                  value={deleteConfirm}
+                  onChange={(event) => setDeleteConfirm(event.target.value)}
+                  required
+                />
+              </label>
+              {deleteError && <p className="error">{deleteError}</p>}
+              <button className="danger-button" type="submit">
+                Delete account
+              </button>
+            </form>
+          )}
+        </section>
       </main>
     </>
   );
