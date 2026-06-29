@@ -6,6 +6,7 @@ import type {
   RegisterInput,
   TaskDto,
   UpdateAccountInput,
+  UpdateCategoryInput,
   UpdateTaskInput,
   UserDto
 } from "@priority1/shared";
@@ -88,5 +89,10 @@ export const api = {
     request<{ category: CategoryDto }>("/categories", {
       method: "POST",
       body: JSON.stringify({ name })
+    }),
+  updateCategory: (categoryId: string, body: UpdateCategoryInput) =>
+    request<{ category: CategoryDto }>(`/categories/${categoryId}`, {
+      method: "PATCH",
+      body: JSON.stringify(body)
     })
 };

@@ -45,6 +45,10 @@ export const createCategorySchema = z.object({
   name: z.string().trim().min(1).max(80)
 });
 
+export const updateCategorySchema = z.object({
+  name: z.string().trim().min(1).max(80)
+});
+
 export const reorderCategoriesSchema = z.object({
   categoryIds: z.array(z.string().uuid()).min(1)
 });
@@ -56,6 +60,7 @@ export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
 export type ReorderTasksInput = z.infer<typeof reorderTasksSchema>;
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
+export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
 export type ReorderCategoriesInput = z.infer<typeof reorderCategoriesSchema>;
 
 export type UserDto = {

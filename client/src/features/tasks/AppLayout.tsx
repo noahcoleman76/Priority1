@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Check, Pencil, X } from "lucide-react";
 import { Header } from "../../components/Header";
 import { api } from "../../api/client";
 import { CreateTaskForm } from "./CreateTaskForm";
@@ -12,6 +13,9 @@ const TOP_PRIORITIES = "top";
 export const AppLayout = () => {
   const { data, setData, loading, error, refresh } = useAppData();
   const [selectedCategoryId, setSelectedCategoryId] = useState(TOP_PRIORITIES);
+  const [editingCategoryName, setEditingCategoryName] = useState(false);
+  const [categoryNameDraft, setCategoryNameDraft] = useState("");
+  const [categoryNameError, setCategoryNameError] = useState("");
 
   const selectedCategory = useMemo(
     () => data.categories.find((category) => category.id === selectedCategoryId),
@@ -68,6 +72,41 @@ export const AppLayout = () => {
     await refresh();
   };
 
+  const startCategoryRename = () => {
+    if (!selectedCategory) {
+      return;
+    }
+    setCategoryNameDraft(selectedCategory.name);
+    setCategoryNameError("");
+    setEditingCategoryName(true);
+  };
+
+  const cancelCategoryRename = () => {
+    setEditingCategoryName(false);
+    setCategoryNameError("");
+  };
+
+  const saveCategoryName = async () => {
+    if (!selectedCategory) {
+      return;
+    }
+
+    const name = categoryNameDraft.trim();
+    if (!name) {
+      setCategoryNameError("Category name is required");
+      return;
+    }
+
+    setCategoryNameError("");
+    try {
+      await api.updateCategory(selectedCategory.id, { name });
+      setEditingCategoryName(false);
+      await refresh();
+    } catch (err) {
+      setCategoryNameError(err instanceof Error ? err.message : "Unable to rename category");
+    }
+  };
+
   return (
     <>
       <Header />
@@ -113,7 +152,56 @@ export const AppLayout = () => {
         {!loading && selectedCategoryId !== TOP_PRIORITIES && selectedCategory && (
           <section className="task-view-panel">
             <div className="task-view-header">
-              <h1>{selectedCategory.name}</h1>
+              {editingCategoryName ? (
+                <div className="category-title-edit">
+                  <label className="sr-only" htmlFor="category-name">
+                    Category name
+                  </label>
+                  <input
+                    id="category-name"
+                    value={categoryNameDraft}
+                    onChange={(event) => setCategoryNameDraft(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        void saveCategoryName();
+                      }
+                      if (event.key === "Escape") {
+                        cancelCategoryRename();
+                      }
+                    }}
+                    autoFocus
+                  />
+                  <button
+                    className="task-icon-action complete-action"
+                    onClick={saveCategoryName}
+                    aria-label="Save category name"
+                    title="Save category name"
+                  >
+                    <Check size={16} />
+                  </button>
+                  <button
+                    className="task-icon-action"
+                    onClick={cancelCategoryRename}
+                    aria-label="Cancel category rename"
+                    title="Cancel"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ) : (
+                <div className="category-title-row">
+                  <h1>{selectedCategory.name}</h1>
+                  <button
+                    className="task-icon-action"
+                    onClick={startCategoryRename}
+                    aria-label="Edit category name"
+                    title="Edit category name"
+                  >
+                    <Pencil size={16} />
+                  </button>
+                </div>
+              )}
+              {categoryNameError && <p className="error">{categoryNameError}</p>}
             </div>
             <SortableTaskList
               tasks={selectedCategory.activeTasks}

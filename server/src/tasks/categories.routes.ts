@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createCategorySchema, reorderCategoriesSchema } from "@priority1/shared";
+import { createCategorySchema, reorderCategoriesSchema, updateCategorySchema } from "@priority1/shared";
 import { requireAuth } from "../auth/middleware.js";
 import { prisma } from "../db.js";
 import { asyncHandler, HttpError } from "../errors.js";
@@ -65,6 +65,32 @@ router.post(
         }
       });
       res.status(201).json({ category: toCategoryDto(category) });
+    } catch (error) {
+      normalizePrismaError(error);
+    }
+  })
+);
+
+router.patch(
+  "/categories/:categoryId",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const input = updateCategorySchema.parse(req.body);
+    const categoryId = String(req.params.categoryId);
+    const existing = await prisma.category.findFirst({
+      where: { id: categoryId, userId: req.user!.id }
+    });
+
+    if (!existing) {
+      throw new HttpError(404, "Category not found");
+    }
+
+    try {
+      const category = await prisma.category.update({
+        where: { id: existing.id },
+        data: { name: input.name }
+      });
+      res.json({ category: toCategoryDto(category) });
     } catch (error) {
       normalizePrismaError(error);
     }
