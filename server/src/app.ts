@@ -15,7 +15,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: config.clientOrigin, credentials: false }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || config.clientOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error("Not allowed by CORS"));
+    },
+    credentials: false
+  })
+);
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan(config.nodeEnv === "production" ? "combined" : "dev"));
 

@@ -10,10 +10,19 @@ const required = (name: string) => {
   return value;
 };
 
+const clientOrigins = (
+  process.env.CLIENT_ORIGINS ??
+  process.env.CLIENT_ORIGIN ??
+  "http://localhost:5173,http://localhost:5174,https://localhost,capacitor://localhost"
+)
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 export const config = {
   databaseUrl: required("DATABASE_URL"),
   jwtSecret: required("JWT_SECRET"),
-  clientOrigin: process.env.CLIENT_ORIGIN ?? "http://localhost:5173",
+  clientOrigins,
   port: Number(process.env.PORT ?? 4000),
   nodeEnv: process.env.NODE_ENV ?? "development"
 };
