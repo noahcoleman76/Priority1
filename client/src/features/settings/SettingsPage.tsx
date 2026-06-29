@@ -54,6 +54,7 @@ export const SettingsPage = () => {
                 key={preset.id}
                 className="accent-option"
                 aria-pressed={accentId === preset.id}
+                aria-label={`Use ${preset.name} accent color`}
                 onClick={() => setAccentId(preset.id)}
                 type="button"
               >
@@ -64,7 +65,6 @@ export const SettingsPage = () => {
                     borderColor: preset.colors.accentStrong
                   }}
                 />
-                <span>{preset.name}</span>
               </button>
             ))}
           </div>
