@@ -1,6 +1,13 @@
 :root {
+  --accent: #c2410c;
+  --accent-strong: #9a3412;
+  --accent-soft: #ffedd5;
+  --accent-border: #fed7aa;
+  --accent-text: #7c2d12;
+  --page-start: #fff7ed;
+  --page-mid: #fffaf5;
   color: #1f2933;
-  background: #fff7ed;
+  background: var(--page-start);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
@@ -15,7 +22,7 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    linear-gradient(180deg, #fff7ed 0%, #fffaf5 42%, #f7f7f5 100%);
+    linear-gradient(180deg, var(--page-start) 0%, var(--page-mid) 42%, #f7f7f5 100%);
   min-height: 100vh;
 }
 
@@ -37,7 +44,7 @@ a {
 .app-header {
   align-items: center;
   background: rgba(255, 255, 255, 0.92);
-  border-bottom: 1px solid #fed7aa;
+  border-bottom: 1px solid var(--accent-border);
   display: flex;
   justify-content: space-between;
   padding: 16px clamp(16px, 5vw, 48px);
@@ -47,7 +54,7 @@ a {
 }
 
 .brand {
-  color: #9a3412;
+  color: var(--accent-strong);
   font-size: 1.3rem;
   font-weight: 700;
   text-decoration: none;
@@ -154,6 +161,48 @@ textarea {
   width: 100%;
 }
 
+.accent-settings {
+  margin-bottom: 16px;
+}
+
+.accent-settings h2 {
+  margin: 0;
+}
+
+.accent-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.accent-option {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #d8d8d2;
+  border-radius: 8px;
+  color: #29343d;
+  display: flex;
+  font-weight: 650;
+  gap: 10px;
+  min-height: 44px;
+  padding: 9px 10px;
+  text-align: left;
+}
+
+.accent-option[aria-pressed="true"] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--accent-text);
+}
+
+.accent-swatch {
+  border: 1px solid;
+  border-radius: 999px;
+  height: 20px;
+  width: 20px;
+}
+
 .create-toggle,
 .primary-button,
 .secondary-button {
@@ -164,8 +213,8 @@ textarea {
 
 .create-toggle,
 .primary-button {
-  background: #c2410c;
-  border: 1px solid #c2410c;
+  background: var(--accent);
+  border: 1px solid var(--accent);
   color: #ffffff;
 }
 
@@ -195,9 +244,9 @@ textarea {
 
 .category-bubble {
   background: #ffffff;
-  border: 1px solid #fed7aa;
+  border: 1px solid var(--accent-border);
   border-radius: 999px;
-  color: #7c2d12;
+  color: var(--accent-text);
   flex: 0 0 auto;
   font-weight: 650;
   max-width: 210px;
@@ -209,33 +258,33 @@ textarea {
 }
 
 .category-bubble[aria-pressed="true"] {
-  background: #ffedd5;
-  border-color: #fb923c;
-  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.18);
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
 .category-bubble-top {
-  background: #c2410c;
-  border-color: #c2410c;
+  background: var(--accent);
+  border-color: var(--accent);
   color: #ffffff;
 }
 
 .category-bubble-top[aria-pressed="true"] {
-  background: #9a3412;
-  border-color: #9a3412;
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
 }
 
 .task-view-panel {
   background: rgba(255, 255, 255, 0.82);
-  border: 1px solid #fed7aa;
+  border: 1px solid var(--accent-border);
   border-radius: 8px;
-  box-shadow: 0 18px 45px rgba(154, 52, 18, 0.08);
+  box-shadow: 0 18px 45px color-mix(in srgb, var(--accent) 8%, transparent);
   margin-top: 18px;
   padding: 18px;
 }
 
 .task-view-header {
-  border-bottom: 1px solid #ffedd5;
+  border-bottom: 1px solid var(--accent-soft);
   margin-bottom: 16px;
   padding-bottom: 10px;
 }
@@ -323,6 +372,33 @@ textarea {
   background: #fee2e2;
   border-color: #fca5a5;
   color: #b91c1c;
+}
+
+.delete-confirm {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+}
+
+.confirm-delete-button,
+.cancel-delete-button {
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  min-height: 36px;
+  padding: 0 10px;
+}
+
+.confirm-delete-button {
+  background: #b91c1c;
+  border: 1px solid #b91c1c;
+  color: #ffffff;
+}
+
+.cancel-delete-button {
+  background: #ffffff;
+  border: 1px solid #d8d8d2;
+  color: #52606d;
 }
 
 @keyframes complete-pop {

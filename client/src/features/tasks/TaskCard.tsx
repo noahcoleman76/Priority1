@@ -21,6 +21,7 @@ export const TaskCard = ({ task, categories, dragHandle, onChanged, completed = 
   });
   const [error, setError] = useState("");
   const [isCompleting, setIsCompleting] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
 
   const complete = async () => {
     setIsCompleting(true);
@@ -30,6 +31,11 @@ export const TaskCard = ({ task, categories, dragHandle, onChanged, completed = 
   };
 
   const deleteTask = async () => {
+    if (!confirmingDelete) {
+      setConfirmingDelete(true);
+      return;
+    }
+
     await api.deleteTask(task.id);
     await onChanged(task.id);
   };
@@ -58,7 +64,6 @@ export const TaskCard = ({ task, categories, dragHandle, onChanged, completed = 
           {task.title}
         </button>
         <div className="task-actions">
-          {dragHandle ?? <GripVertical size={18} className="drag-placeholder" />}
           {completed ? (
             <button className="small-button" onClick={restore}>
               <RotateCcw size={16} />
@@ -66,22 +71,38 @@ export const TaskCard = ({ task, categories, dragHandle, onChanged, completed = 
             </button>
           ) : (
             <>
-            <button
-              className={`task-icon-action complete-action ${isCompleting ? "complete-action-done" : ""}`}
-              onClick={complete}
-              aria-label="Complete task"
-              title="Complete task"
-            >
-              <Check size={16} />
-            </button>
-            <button
-              className="task-icon-action delete-action"
-              onClick={deleteTask}
-              aria-label="Delete task"
-              title="Delete task"
-            >
-              <Trash2 size={16} />
-            </button>
+              <button
+                className={`task-icon-action complete-action ${isCompleting ? "complete-action-done" : ""}`}
+                onClick={complete}
+                aria-label="Complete task"
+                title="Complete task"
+              >
+                <Check size={16} />
+              </button>
+              {confirmingDelete ? (
+                <span className="delete-confirm">
+                  <button className="confirm-delete-button" onClick={deleteTask}>
+                    Delete?
+                  </button>
+                  <button
+                    className="cancel-delete-button"
+                    onClick={() => setConfirmingDelete(false)}
+                    aria-label="Cancel delete"
+                  >
+                    Cancel
+                  </button>
+                </span>
+              ) : (
+                <button
+                  className="task-icon-action delete-action"
+                  onClick={deleteTask}
+                  aria-label="Delete task"
+                  title="Delete task"
+                >
+                  <Trash2 size={16} />
+                </button>
+              )}
+              {dragHandle ?? <GripVertical size={18} className="drag-placeholder" />}
             </>
           )}
         </div>

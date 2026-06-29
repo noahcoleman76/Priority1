@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { Header } from "../../components/Header";
 import { api } from "../../api/client";
 import { useAuth } from "../auth/AuthContext";
+import { accentPresets, useAccent } from "./AccentContext";
 
 export const SettingsPage = () => {
   const { user, updateUser } = useAuth();
+  const { accentId, setAccentId } = useAccent();
   const [form, setForm] = useState({
     username: user?.username ?? "",
     email: user?.email ?? "",
@@ -42,6 +44,31 @@ export const SettingsPage = () => {
           Back
         </Link>
         <h1>Settings</h1>
+        <section className="settings-form accent-settings" aria-labelledby="accent-heading">
+          <div>
+            <h2 id="accent-heading">Accent color</h2>
+          </div>
+          <div className="accent-grid">
+            {accentPresets.map((preset) => (
+              <button
+                key={preset.id}
+                className="accent-option"
+                aria-pressed={accentId === preset.id}
+                onClick={() => setAccentId(preset.id)}
+                type="button"
+              >
+                <span
+                  className="accent-swatch"
+                  style={{
+                    background: preset.colors.accent,
+                    borderColor: preset.colors.accentStrong
+                  }}
+                />
+                <span>{preset.name}</span>
+              </button>
+            ))}
+          </div>
+        </section>
         <form className="settings-form" onSubmit={submit}>
           <label>
             Username
