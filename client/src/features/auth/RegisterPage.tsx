@@ -75,6 +75,10 @@ export const RegisterPage = () => {
         <p className="muted">
           Already have an account? <Link to="/login">Log in</Link>
         </p>
+        <p className="auth-links">
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/contact">Contact</Link>
+        </p>
       </form>
     </main>
   );

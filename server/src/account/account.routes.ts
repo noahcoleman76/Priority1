@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { Router } from "express";
-import { updateAccountSchema } from "@priority1/shared";
+import { deleteAccountSchema, updateAccountSchema } from "@priority1/shared";
 import { requireAuth } from "../auth/middleware.js";
 import { toUserDto } from "../auth/auth.routes.js";
 import { prisma } from "../db.js";
@@ -63,6 +63,22 @@ router.patch(
     });
 
     res.json({ user: toUserDto(user) });
+  })
+);
+
+router.delete(
+  "/me",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const input = deleteAccountSchema.parse(req.body);
+    const current = await prisma.user.findUniqueOrThrow({ where: { id: req.user!.id } });
+
+    if (!(await bcrypt.compare(input.currentPassword, current.passwordHash))) {
+      throw new HttpError(400, "Current password is incorrect");
+    }
+
+    await prisma.user.delete({ where: { id: current.id } });
+    res.status(204).send();
   })
 );
 

@@ -24,6 +24,10 @@ export const updateAccountSchema = z.object({
   newPassword: z.string().min(8).max(128).optional()
 });
 
+export const deleteAccountSchema = z.object({
+  currentPassword: z.string().min(1)
+});
+
 export const createTaskSchema = z.object({
   title: z.string().trim().min(1).max(180),
   description: z.string().trim().max(5000).optional().default(""),
@@ -56,6 +60,7 @@ export const reorderCategoriesSchema = z.object({
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type UpdateAccountInput = z.infer<typeof updateAccountSchema>;
+export type DeleteAccountInput = z.infer<typeof deleteAccountSchema>;
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
 export type ReorderTasksInput = z.infer<typeof reorderTasksSchema>;

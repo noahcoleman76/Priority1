@@ -2,6 +2,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "../features/auth/AuthContext";
 import { LoginPage } from "../features/auth/LoginPage";
 import { RegisterPage } from "../features/auth/RegisterPage";
+import { ContactPage } from "../features/legal/ContactPage";
+import { PrivacyPage } from "../features/legal/PrivacyPage";
 import { AppLayout } from "../features/tasks/AppLayout";
 import { SettingsPage } from "../features/settings/SettingsPage";
 
@@ -23,6 +25,8 @@ export const App = () => (
   <Routes>
     <Route path="/login" element={<LoginPage />} />
     <Route path="/register" element={<RegisterPage />} />
+    <Route path="/privacy" element={<PrivacyPage />} />
+    <Route path="/contact" element={<ContactPage />} />
     <Route
       path="/"
       element={

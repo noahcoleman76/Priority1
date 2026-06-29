@@ -2,6 +2,7 @@ import type {
   AppDataDto,
   CategoryDto,
   CreateTaskInput,
+  DeleteAccountInput,
   LoginInput,
   RegisterInput,
   TaskDto,
@@ -65,6 +66,8 @@ export const api = {
   me: () => request<{ user: UserDto }>("/account/me"),
   updateAccount: (body: UpdateAccountInput) =>
     request<{ user: UserDto }>("/account/me", { method: "PATCH", body: JSON.stringify(body) }),
+  deleteAccount: (body: DeleteAccountInput) =>
+    request<void>("/account/me", { method: "DELETE", body: JSON.stringify(body) }),
   appData: () => request<AppDataDto>("/app-data"),
   createTask: (body: CreateTaskInput) =>
     request<{ task: TaskDto }>("/tasks", { method: "POST", body: JSON.stringify(body) }),

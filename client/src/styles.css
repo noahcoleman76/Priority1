@@ -227,7 +227,8 @@ textarea {
 
 .create-toggle,
 .primary-button,
-.secondary-button {
+.secondary-button,
+.danger-button {
   border-radius: 8px;
   min-height: 42px;
   padding: 10px 14px;
@@ -250,10 +251,67 @@ textarea {
   color: #29343d;
 }
 
+.danger-button {
+  background: #b91c1c;
+  border: 1px solid #b91c1c;
+  color: #ffffff;
+}
+
 .button-row {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.danger-zone {
+  border-color: #fecaca;
+  margin-top: 18px;
+}
+
+.danger-zone h2 {
+  color: #991b1b;
+  margin-top: 0;
+}
+
+.auth-links,
+.legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 0;
+}
+
+.legal-page {
+  min-height: 100vh;
+  padding: 28px 16px 64px;
+}
+
+.legal-panel {
+  background: #ffffff;
+  border: 1px solid #deded8;
+  border-radius: 8px;
+  display: grid;
+  gap: 14px;
+  line-height: 1.55;
+  margin: 0 auto;
+  max-width: 760px;
+  padding: 24px;
+}
+
+.legal-brand {
+  justify-self: start;
+}
+
+.legal-panel h1 {
+  margin-bottom: 0;
+}
+
+.legal-panel h2 {
+  margin: 10px 0 0;
+}
+
+.legal-panel p {
+  margin: 0;
 }
 
 .category-select {

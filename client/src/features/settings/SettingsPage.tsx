@@ -6,7 +6,7 @@ import { useAuth } from "../auth/AuthContext";
 import { accentPresets, useAccent } from "./AccentContext";
 
 export const SettingsPage = () => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, logout } = useAuth();
   const { accentId, setAccentId } = useAccent();
   const [form, setForm] = useState({
     username: user?.username ?? "",
@@ -16,6 +16,9 @@ export const SettingsPage = () => {
   });
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleteConfirm, setDeleteConfirm] = useState("");
+  const [deleteError, setDeleteError] = useState("");
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -33,6 +36,23 @@ export const SettingsPage = () => {
       setStatus("Settings saved");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to save settings");
+    }
+  };
+
+  const deleteAccount = async (event: FormEvent) => {
+    event.preventDefault();
+    setDeleteError("");
+
+    if (deleteConfirm !== "DELETE") {
+      setDeleteError("Type DELETE to confirm account deletion");
+      return;
+    }
+
+    try {
+      await api.deleteAccount({ currentPassword: deletePassword });
+      logout();
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : "Unable to delete account");
     }
   };
 
@@ -108,6 +128,35 @@ export const SettingsPage = () => {
           {error && <p className="error">{error}</p>}
           <button className="primary-button" type="submit">
             Save settings
+          </button>
+        </form>
+        <form className="settings-form danger-zone" onSubmit={deleteAccount}>
+          <div>
+            <h2>Delete account</h2>
+            <p className="muted">
+              Permanently deletes your account, categories, active tasks, and completed tasks.
+            </p>
+          </div>
+          <label>
+            Current password
+            <input
+              value={deletePassword}
+              onChange={(event) => setDeletePassword(event.target.value)}
+              type="password"
+              required
+            />
+          </label>
+          <label>
+            Type DELETE
+            <input
+              value={deleteConfirm}
+              onChange={(event) => setDeleteConfirm(event.target.value)}
+              required
+            />
+          </label>
+          {deleteError && <p className="error">{deleteError}</p>}
+          <button className="danger-button" type="submit">
+            Delete account
           </button>
         </form>
       </main>
