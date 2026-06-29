@@ -54,10 +54,16 @@ a {
 }
 
 .brand {
-  color: var(--accent-strong);
-  font-size: 1.3rem;
-  font-weight: 700;
+  align-items: center;
+  display: inline-flex;
   text-decoration: none;
+}
+
+.brand img {
+  display: block;
+  height: 42px;
+  object-fit: contain;
+  width: auto;
 }
 
 .header-actions {
@@ -154,6 +160,14 @@ textarea {
   gap: 16px;
   padding: 22px;
   width: min(100%, 440px);
+}
+
+.auth-logo {
+  display: block;
+  height: auto;
+  justify-self: center;
+  max-width: 260px;
+  width: min(72vw, 260px);
 }
 
 .settings-form,

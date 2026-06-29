@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import priorityLogo from "../../assets/priority1-logo.png";
 
 export const LoginPage = () => {
   const { login, user } = useAuth();
@@ -25,7 +26,7 @@ export const LoginPage = () => {
   return (
     <main className="auth-page">
       <form className="auth-panel" onSubmit={submit}>
-        <h1>Priority1</h1>
+        <img className="auth-logo" src={priorityLogo} alt="Priority1" />
         <label>
           Username
           <input value={username} onChange={(event) => setUsername(event.target.value)} required />
