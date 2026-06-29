@@ -8,7 +8,7 @@ import { TaskCard } from "./TaskCard";
 type SortableItemProps = {
   task: TaskDto;
   categories: CategoryWithTasksDto[];
-  onChanged: () => Promise<void>;
+  onChanged: (taskId?: string) => Promise<void>;
 };
 
 const SortableItem = ({ task, categories, onChanged }: SortableItemProps) => {
@@ -38,7 +38,7 @@ type Props = {
   tasks: TaskDto[];
   categories: CategoryWithTasksDto[];
   onReorder: (taskIds: string[]) => Promise<void>;
-  onChanged: () => Promise<void>;
+  onChanged: (taskId?: string) => Promise<void>;
 };
 
 export const SortableTaskList = ({ tasks, categories, onReorder, onChanged }: Props) => {

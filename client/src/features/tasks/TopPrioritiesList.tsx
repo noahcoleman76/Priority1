@@ -8,7 +8,7 @@ import { TaskCard } from "./TaskCard";
 type Props = {
   categories: CategoryWithTasksDto[];
   onReorder: (categoryIds: string[]) => Promise<void>;
-  onChanged: () => Promise<void>;
+  onChanged: (taskId?: string) => Promise<void>;
 };
 
 const TopPriorityItem = ({
@@ -18,7 +18,7 @@ const TopPriorityItem = ({
 }: {
   category: CategoryWithTasksDto;
   categories: CategoryWithTasksDto[];
-  onChanged: () => Promise<void>;
+  onChanged: (taskId?: string) => Promise<void>;
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: category.id });
   const task = category.activeTasks[0];

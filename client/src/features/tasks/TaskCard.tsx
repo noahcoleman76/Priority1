@@ -7,7 +7,7 @@ type Props = {
   task: TaskDto;
   categories: CategoryWithTasksDto[];
   dragHandle?: React.ReactNode;
-  onChanged: () => Promise<void>;
+  onChanged: (taskId?: string) => Promise<void>;
   completed?: boolean;
 };
 
@@ -26,12 +26,12 @@ export const TaskCard = ({ task, categories, dragHandle, onChanged, completed = 
     setIsCompleting(true);
     await new Promise((resolve) => window.setTimeout(resolve, 420));
     await api.completeTask(task.id);
-    await onChanged();
+    await onChanged(task.id);
   };
 
   const deleteTask = async () => {
     await api.deleteTask(task.id);
-    await onChanged();
+    await onChanged(task.id);
   };
 
   const restore = async () => {

@@ -5,7 +5,7 @@ import { TaskCard } from "./TaskCard";
 type Props = {
   category: CategoryWithTasksDto;
   categories: CategoryWithTasksDto[];
-  onChanged: () => Promise<void>;
+  onChanged: (taskId?: string) => Promise<void>;
 };
 
 export const CompletedTasks = ({ category, categories, onChanged }: Props) => {

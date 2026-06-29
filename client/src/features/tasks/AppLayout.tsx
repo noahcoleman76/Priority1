@@ -55,6 +55,19 @@ export const AppLayout = () => {
     }
   };
 
+  const refreshAfterTaskChange = async (taskId?: string) => {
+    if (taskId) {
+      setData((current) => ({
+        categories: current.categories.map((category) => ({
+          ...category,
+          activeTasks: category.activeTasks.filter((task) => task.id !== taskId),
+          completedTasks: category.completedTasks.filter((task) => task.id !== taskId)
+        }))
+      }));
+    }
+    await refresh();
+  };
+
   return (
     <>
       <Header />
@@ -89,7 +102,11 @@ export const AppLayout = () => {
             <div className="task-view-header">
               <h1>Top Priorities</h1>
             </div>
-            <TopPrioritiesList categories={data.categories} onReorder={reorderCategories} onChanged={refresh} />
+            <TopPrioritiesList
+              categories={data.categories}
+              onReorder={reorderCategories}
+              onChanged={refreshAfterTaskChange}
+            />
           </section>
         )}
 
@@ -101,10 +118,14 @@ export const AppLayout = () => {
             <SortableTaskList
               tasks={selectedCategory.activeTasks}
               categories={data.categories}
-              onChanged={refresh}
+              onChanged={refreshAfterTaskChange}
               onReorder={(taskIds) => reorderTasks(selectedCategory.id, taskIds)}
             />
-            <CompletedTasks category={selectedCategory} categories={data.categories} onChanged={refresh} />
+            <CompletedTasks
+              category={selectedCategory}
+              categories={data.categories}
+              onChanged={refreshAfterTaskChange}
+            />
           </section>
         )}
       </main>
