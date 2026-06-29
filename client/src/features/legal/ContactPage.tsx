@@ -11,8 +11,12 @@ export const ContactPage = () => (
       </Link>
       <h1>Contact</h1>
       <p>
-        For Priority1 support, account questions, privacy requests, or app feedback, email{" "}
+        For Priority1 support, account help, privacy requests, or app feedback, email{" "}
         <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
+      </p>
+      <p>
+        If you cannot access your account or need help with your task lists across devices, include
+        the email address on your Priority1 account when you reach out.
       </p>
       <p className="muted">Support is provided by Coleman Development.</p>
       <div className="legal-links">
