@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: priority1
+    env: node
+    plan: free
+    buildCommand: npm install && npm run db:generate && npm run db:deploy && npm run build
+    startCommand: npm run start --workspace server
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: priority1-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+      - key: CLIENT_ORIGIN
+        value: https://priority1.onrender.com
+
+databases:
+  - name: priority1-db
+    plan: free

@@ -1,0 +1,303 @@
+:root {
+  color: #1f2933;
+  background: #f7f7f5;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+.app-header {
+  align-items: center;
+  background: #ffffff;
+  border-bottom: 1px solid #deded8;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px clamp(16px, 5vw, 48px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.header-actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.icon-link,
+.icon-button,
+.small-button,
+.drag-handle {
+  align-items: center;
+  background: transparent;
+  border: 1px solid #d8d8d2;
+  border-radius: 8px;
+  color: #374151;
+  display: inline-flex;
+  gap: 6px;
+  min-height: 36px;
+  padding: 7px 10px;
+  text-decoration: none;
+}
+
+.icon-button,
+.drag-handle {
+  aspect-ratio: 1;
+  justify-content: center;
+  padding: 0;
+  width: 36px;
+}
+
+.page-shell {
+  margin: 0 auto;
+  max-width: 820px;
+  padding: 28px 16px 64px;
+}
+
+.page-shell.narrow {
+  max-width: 560px;
+}
+
+h1 {
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+  letter-spacing: 0;
+  margin: 28px 0 18px;
+}
+
+h2 {
+  color: #52606d;
+  font-size: 0.95rem;
+  letter-spacing: 0;
+  margin: 22px 0 8px;
+}
+
+label {
+  color: #3e4c59;
+  display: grid;
+  font-size: 0.9rem;
+  font-weight: 600;
+  gap: 7px;
+}
+
+input,
+select,
+textarea {
+  background: #ffffff;
+  border: 1px solid #cfcfca;
+  border-radius: 8px;
+  color: #1f2933;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.auth-page,
+.centered-page {
+  display: grid;
+  min-height: 100vh;
+  padding: 18px;
+  place-items: center;
+}
+
+.auth-panel,
+.settings-form,
+.task-form {
+  background: #ffffff;
+  border: 1px solid #deded8;
+  border-radius: 8px;
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  width: min(100%, 440px);
+}
+
+.settings-form,
+.task-form {
+  width: 100%;
+}
+
+.create-toggle,
+.primary-button,
+.secondary-button {
+  border-radius: 8px;
+  min-height: 42px;
+  padding: 10px 14px;
+}
+
+.create-toggle,
+.primary-button {
+  background: #1f2933;
+  border: 1px solid #1f2933;
+  color: #ffffff;
+}
+
+.create-toggle {
+  width: 100%;
+}
+
+.secondary-button {
+  background: #ffffff;
+  border: 1px solid #cfcfca;
+  color: #29343d;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.view-controls {
+  margin-top: 22px;
+}
+
+.priority-list,
+.task-list {
+  display: grid;
+  gap: 12px;
+}
+
+.task-card {
+  background: #ffffff;
+  border: 1px solid #deded8;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.task-card-top {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr auto;
+}
+
+.task-title-button {
+  background: transparent;
+  border: 0;
+  color: #1f2933;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+  padding: 6px 0;
+  text-align: left;
+}
+
+.task-actions {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.task-details,
+.edit-form {
+  border-top: 1px solid #eeeeea;
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.task-details p {
+  color: #52606d;
+  line-height: 1.5;
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.completed-section {
+  border-top: 1px solid #deded8;
+  margin-top: 30px;
+  padding-top: 18px;
+}
+
+.completed-toggle {
+  background: transparent;
+  border: 0;
+  color: #52606d;
+  font-weight: 650;
+  padding: 8px 0;
+}
+
+.completed-list {
+  margin-top: 10px;
+}
+
+.completed-card {
+  opacity: 0.8;
+}
+
+.empty-state,
+.muted {
+  color: #6b7280;
+}
+
+.error {
+  color: #b42318;
+  margin: 0;
+}
+
+.success {
+  color: #287a3e;
+  margin: 0;
+}
+
+.back-link {
+  color: #52606d;
+  text-decoration: none;
+}
+
+.drag-placeholder {
+  color: #a3a39d;
+}
+
+@media (max-width: 560px) {
+  .app-header {
+    padding: 14px 16px;
+  }
+
+  .icon-link span {
+    display: none;
+  }
+
+  .task-card-top {
+    grid-template-columns: 1fr;
+  }
+
+  .task-actions {
+    justify-content: space-between;
+  }
+}
