@@ -61,33 +61,43 @@ export const AppLayout = () => {
       <main className="page-shell">
         <CreateTaskForm categories={data.categories} onSaved={refresh} />
 
-        <div className="view-controls">
-          <label>
-            View
-            <select value={selectedCategoryId} onChange={(event) => setSelectedCategoryId(event.target.value)}>
-              <option value={TOP_PRIORITIES}>Top Priorities</option>
-              {data.categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </label>
+        <div className="category-bubbles" aria-label="Category views">
+          <button
+            className="category-bubble category-bubble-top"
+            aria-pressed={selectedCategoryId === TOP_PRIORITIES}
+            onClick={() => setSelectedCategoryId(TOP_PRIORITIES)}
+          >
+            Top Priorities
+          </button>
+          {data.categories.map((category) => (
+            <button
+              key={category.id}
+              className="category-bubble"
+              aria-pressed={selectedCategoryId === category.id}
+              onClick={() => setSelectedCategoryId(category.id)}
+            >
+              {category.name}
+            </button>
+          ))}
         </div>
 
         {loading && <p className="empty-state">Loading tasks...</p>}
         {error && <p className="error">{error}</p>}
 
         {!loading && selectedCategoryId === TOP_PRIORITIES && (
-          <>
-            <h1>Top Priorities</h1>
+          <section className="task-view-panel">
+            <div className="task-view-header">
+              <h1>Top Priorities</h1>
+            </div>
             <TopPrioritiesList categories={data.categories} onReorder={reorderCategories} onChanged={refresh} />
-          </>
+          </section>
         )}
 
         {!loading && selectedCategoryId !== TOP_PRIORITIES && selectedCategory && (
-          <>
-            <h1>{selectedCategory.name}</h1>
+          <section className="task-view-panel">
+            <div className="task-view-header">
+              <h1>{selectedCategory.name}</h1>
+            </div>
             <SortableTaskList
               tasks={selectedCategory.activeTasks}
               categories={data.categories}
@@ -95,7 +105,7 @@ export const AppLayout = () => {
               onReorder={(taskIds) => reorderTasks(selectedCategory.id, taskIds)}
             />
             <CompletedTasks category={selectedCategory} categories={data.categories} onChanged={refresh} />
-          </>
+          </section>
         )}
       </main>
     </>

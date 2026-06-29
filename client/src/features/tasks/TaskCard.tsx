@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import type { CategoryWithTasksDto, TaskDto } from "@priority1/shared";
-import { Check, GripVertical, RotateCcw } from "lucide-react";
+import { Check, GripVertical, RotateCcw, Trash2 } from "lucide-react";
 import { api } from "../../api/client";
 
 type Props = {
@@ -20,9 +20,17 @@ export const TaskCard = ({ task, categories, dragHandle, onChanged, completed = 
     categoryId: task.categoryId
   });
   const [error, setError] = useState("");
+  const [isCompleting, setIsCompleting] = useState(false);
 
   const complete = async () => {
+    setIsCompleting(true);
+    await new Promise((resolve) => window.setTimeout(resolve, 420));
     await api.completeTask(task.id);
+    await onChanged();
+  };
+
+  const deleteTask = async () => {
+    await api.deleteTask(task.id);
     await onChanged();
   };
 
@@ -44,7 +52,7 @@ export const TaskCard = ({ task, categories, dragHandle, onChanged, completed = 
   };
 
   return (
-    <article className={`task-card ${completed ? "completed-card" : ""}`}>
+    <article className={`task-card ${completed ? "completed-card" : ""} ${isCompleting ? "task-card-completing" : ""}`}>
       <div className="task-card-top">
         <button className="task-title-button" onClick={() => setExpanded((value) => !value)}>
           {task.title}
@@ -57,10 +65,24 @@ export const TaskCard = ({ task, categories, dragHandle, onChanged, completed = 
               Restore
             </button>
           ) : (
-            <button className="small-button" onClick={complete}>
+            <>
+            <button
+              className={`task-icon-action complete-action ${isCompleting ? "complete-action-done" : ""}`}
+              onClick={complete}
+              aria-label="Complete task"
+              title="Complete task"
+            >
               <Check size={16} />
-              Complete
             </button>
+            <button
+              className="task-icon-action delete-action"
+              onClick={deleteTask}
+              aria-label="Delete task"
+              title="Delete task"
+            >
+              <Trash2 size={16} />
+            </button>
+            </>
           )}
         </div>
       </div>

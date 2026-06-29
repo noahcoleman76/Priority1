@@ -104,6 +104,22 @@ router.patch(
   })
 );
 
+router.delete(
+  "/tasks/:taskId",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const taskId = String(req.params.taskId);
+    const task = await prisma.task.findFirst({ where: { id: taskId, userId: req.user!.id } });
+
+    if (!task) {
+      throw new HttpError(404, "Task not found");
+    }
+
+    await prisma.task.delete({ where: { id: task.id } });
+    res.status(204).send();
+  })
+);
+
 router.post(
   "/tasks/:taskId/complete",
   requireAuth,

@@ -69,6 +69,7 @@ export const api = {
     request<{ task: TaskDto }>("/tasks", { method: "POST", body: JSON.stringify(body) }),
   updateTask: (taskId: string, body: UpdateTaskInput) =>
     request<{ task: TaskDto }>(`/tasks/${taskId}`, { method: "PATCH", body: JSON.stringify(body) }),
+  deleteTask: (taskId: string) => request<void>(`/tasks/${taskId}`, { method: "DELETE" }),
   completeTask: (taskId: string) =>
     request<{ task: TaskDto }>(`/tasks/${taskId}/complete`, { method: "POST" }),
   restoreTask: (taskId: string) =>
