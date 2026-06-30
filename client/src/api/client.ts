@@ -97,5 +97,6 @@ export const api = {
     request<{ category: CategoryDto }>(`/categories/${categoryId}`, {
       method: "PATCH",
       body: JSON.stringify(body)
-    })
+    }),
+  deleteCategory: (categoryId: string) => request<void>(`/categories/${categoryId}`, { method: "DELETE" })
 };

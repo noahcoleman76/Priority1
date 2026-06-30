@@ -97,4 +97,30 @@ router.patch(
   })
 );
 
+router.delete(
+  "/categories/:categoryId",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const categoryId = String(req.params.categoryId);
+    const existing = await prisma.category.findFirst({
+      where: { id: categoryId, userId: req.user!.id }
+    });
+
+    if (!existing) {
+      throw new HttpError(404, "Category not found");
+    }
+
+    const activeTaskCount = await prisma.task.count({
+      where: { categoryId: existing.id, userId: req.user!.id, completed: false }
+    });
+
+    if (activeTaskCount > 0) {
+      throw new HttpError(400, "Complete or delete all active tasks before deleting this category");
+    }
+
+    await prisma.category.delete({ where: { id: existing.id } });
+    res.status(204).send();
+  })
+);
+
 export { router as categoriesRouter };

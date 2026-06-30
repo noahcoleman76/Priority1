@@ -449,6 +449,7 @@ textarea {
   min-height: 38px;
   overflow: hidden;
   padding: 8px 14px;
+  touch-action: none;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -468,6 +469,27 @@ textarea {
 .category-bubble-top[aria-pressed="true"] {
   background: var(--accent-strong);
   border-color: var(--accent-strong);
+}
+
+.category-bubble-plus {
+  align-items: center;
+  display: inline-flex;
+  font-size: 1.25rem;
+  justify-content: center;
+  min-width: 42px;
+  padding: 8px 12px;
+}
+
+.category-create-inline {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.category-create-inline input {
+  min-height: 38px;
+  width: min(56vw, 220px);
 }
 
 .task-view-panel {
@@ -509,10 +531,29 @@ textarea {
   min-width: 0;
 }
 
+.category-management-row {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.category-management-row .muted {
+  font-size: 0.88rem;
+  margin: 0;
+}
+
 .priority-list,
 .task-list {
   display: grid;
   gap: 12px;
+}
+
+.priority-group h2 {
+  margin: 8px 0 6px;
+}
+
+.priority-group:first-child h2 {
+  margin-top: 0;
 }
 
 .task-card {
