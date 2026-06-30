@@ -44,6 +44,10 @@ model Task {
   priorityOrder Int       @default(0) @map("priority_order")
   completed     Boolean   @default(false)
   completedAt   DateTime? @map("completed_at")
+  recurrenceType String?  @map("recurrence_type") @db.VarChar(20)
+  recurrenceDays Int[]    @default([]) @map("recurrence_days")
+  recurrenceAnchor DateTime? @map("recurrence_anchor")
+  nextDueAt     DateTime? @map("next_due_at")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -51,5 +55,6 @@ model Task {
 
   @@index([userId, categoryId, completed, priorityOrder])
   @@index([userId, completedAt])
+  @@index([userId, recurrenceType, nextDueAt])
   @@map("tasks")
 }

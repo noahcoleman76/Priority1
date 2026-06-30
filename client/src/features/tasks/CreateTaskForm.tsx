@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { CategoryWithTasksDto } from "@priority1/shared";
 import { Check, ChevronDown } from "lucide-react";
 import { api } from "../../api/client";
+import { RecurrenceFields, RecurrenceFormValue } from "./RecurrenceFields";
 
 type Props = {
   categories: CategoryWithTasksDto[];
@@ -14,6 +15,10 @@ export const CreateTaskForm = ({ categories, onSaved }: Props) => {
   const [description, setDescription] = useState("");
   const [categoryChoice, setCategoryChoice] = useState(categories[0]?.id ?? "new");
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
+  const [recurrence, setRecurrence] = useState<RecurrenceFormValue>({
+    recurrenceType: null,
+    recurrenceDays: []
+  });
   const [newCategoryName, setNewCategoryName] = useState("");
   const [error, setError] = useState("");
 
@@ -45,6 +50,7 @@ export const CreateTaskForm = ({ categories, onSaved }: Props) => {
     setDescription("");
     setCategoryChoice(categories[0]?.id ?? "new");
     setCategoryMenuOpen(false);
+    setRecurrence({ recurrenceType: null, recurrenceDays: [] });
     setNewCategoryName("");
     setError("");
     setOpen(false);
@@ -53,12 +59,18 @@ export const CreateTaskForm = ({ categories, onSaved }: Props) => {
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     setError("");
+    if (recurrence.recurrenceType === "custom" && recurrence.recurrenceDays.length === 0) {
+      setError("Choose at least one custom recurrence day");
+      return;
+    }
     try {
       await api.createTask({
         title,
         description,
         categoryId: categoryChoice === "new" ? undefined : categoryChoice,
-        newCategoryName: categoryChoice === "new" ? newCategoryName : undefined
+        newCategoryName: categoryChoice === "new" ? newCategoryName : undefined,
+        recurrenceType: recurrence.recurrenceType,
+        recurrenceDays: recurrence.recurrenceDays
       });
       reset();
       await onSaved();
@@ -85,6 +97,7 @@ export const CreateTaskForm = ({ categories, onSaved }: Props) => {
         Task Description
         <textarea value={description} onChange={(event) => setDescription(event.target.value)} rows={3} />
       </label>
+      <RecurrenceFields value={recurrence} onChange={setRecurrence} />
       <label>
         <span>Category</span>
         <div className="category-select">

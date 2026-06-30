@@ -7,10 +7,14 @@ import { asyncHandler, HttpError } from "../errors.js";
 import { toCategoryWithTasksDto, toTaskDto } from "./mappers.js";
 import {
   assertCategoryOwner,
+  getInitialNextDueAt,
   getNextCategoryOrder,
+  getNextDueAt,
   getNextTaskOrder,
   listAppData,
+  normalizeRecurrenceDays,
   normalizePrismaError,
+  RecurrenceType,
   reorderCategoryTasks
 } from "./tasks.service.js";
 
@@ -34,6 +38,9 @@ router.post(
     if (!input.categoryId && !input.newCategoryName) {
       throw new HttpError(400, "Choose a category or create a new one");
     }
+    if (input.recurrenceType === "custom" && input.recurrenceDays.length === 0) {
+      throw new HttpError(400, "Choose at least one custom recurrence day");
+    }
 
     try {
       const task = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
@@ -51,13 +58,21 @@ router.post(
           throw new HttpError(404, "Category not found");
         }
 
+        const recurrenceType = input.recurrenceType ?? null;
+        const recurrenceDays = normalizeRecurrenceDays(recurrenceType, input.recurrenceDays);
+        const recurrenceAnchor = recurrenceType ? new Date() : null;
+
         return tx.task.create({
           data: {
             userId: req.user!.id,
             categoryId: category.id,
             title: input.title,
             description: input.description,
-            priorityOrder: await getNextTaskOrder(req.user!.id, category.id)
+            priorityOrder: await getNextTaskOrder(req.user!.id, category.id),
+            recurrenceType,
+            recurrenceDays,
+            recurrenceAnchor,
+            nextDueAt: getInitialNextDueAt(recurrenceType, recurrenceDays)
           }
         });
       });
@@ -86,6 +101,18 @@ router.patch(
     if (input.categoryId && input.categoryId !== existing.categoryId) {
       await assertCategoryOwner(req.user!.id, input.categoryId);
     }
+    if (input.recurrenceType === "custom" && (input.recurrenceDays ?? []).length === 0) {
+      throw new HttpError(400, "Choose at least one custom recurrence day");
+    }
+
+    const recurrenceType =
+      input.recurrenceType === undefined ? existing.recurrenceType : input.recurrenceType;
+    const recurrenceDays =
+      input.recurrenceType === undefined && input.recurrenceDays === undefined
+        ? existing.recurrenceDays
+        : normalizeRecurrenceDays(recurrenceType as RecurrenceType | null, input.recurrenceDays ?? []);
+    const recurrenceChanged =
+      input.recurrenceType !== undefined || input.recurrenceDays !== undefined;
 
     const task = await prisma.task.update({
       where: { id: existing.id },
@@ -96,7 +123,16 @@ router.patch(
         priorityOrder:
           input.categoryId && input.categoryId !== existing.categoryId
             ? await getNextTaskOrder(req.user!.id, input.categoryId)
-            : undefined
+            : undefined,
+        recurrenceType,
+        recurrenceDays,
+        recurrenceAnchor: recurrenceChanged && recurrenceType ? new Date() : recurrenceType ? undefined : null,
+        nextDueAt:
+          recurrenceChanged && recurrenceType
+            ? getInitialNextDueAt(recurrenceType as RecurrenceType, recurrenceDays)
+            : recurrenceType
+              ? undefined
+              : null
       }
     });
 
@@ -130,9 +166,16 @@ router.post(
       throw new HttpError(404, "Task not found");
     }
 
+    const recurrenceType = task.recurrenceType as RecurrenceType | null;
     const updated = await prisma.task.update({
       where: { id: task.id },
-      data: { completed: true, completedAt: new Date() }
+      data: {
+        completed: true,
+        completedAt: new Date(),
+        nextDueAt: recurrenceType
+          ? getNextDueAt(recurrenceType, task.recurrenceDays, new Date(), task.recurrenceAnchor ?? task.createdAt)
+          : undefined
+      }
     });
 
     res.json({ task: toTaskDto(updated) });

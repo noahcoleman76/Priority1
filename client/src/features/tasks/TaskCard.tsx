@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import type { CategoryWithTasksDto, TaskDto } from "@priority1/shared";
 import { Check, GripVertical, RotateCcw, Trash2 } from "lucide-react";
 import { api } from "../../api/client";
+import { RecurrenceFields } from "./RecurrenceFields";
 
 type Props = {
   task: TaskDto;
@@ -17,7 +18,9 @@ export const TaskCard = ({ task, categories, dragHandle, onChanged, completed = 
   const [form, setForm] = useState({
     title: task.title,
     description: task.description,
-    categoryId: task.categoryId
+    categoryId: task.categoryId,
+    recurrenceType: task.recurrenceType,
+    recurrenceDays: task.recurrenceDays
   });
   const [error, setError] = useState("");
   const [isCompleting, setIsCompleting] = useState(false);
@@ -48,6 +51,10 @@ export const TaskCard = ({ task, categories, dragHandle, onChanged, completed = 
   const save = async (event: FormEvent) => {
     event.preventDefault();
     setError("");
+    if (form.recurrenceType === "custom" && form.recurrenceDays.length === 0) {
+      setError("Choose at least one custom recurrence day");
+      return;
+    }
     try {
       await api.updateTask(task.id, form);
       setEditing(false);
@@ -111,6 +118,7 @@ export const TaskCard = ({ task, categories, dragHandle, onChanged, completed = 
       {expanded && !editing && (
         <div className="task-details">
           <p>{task.description || "No description."}</p>
+          {task.recurrenceType && <p className="recurrence-summary">Repeats {task.recurrenceType}</p>}
           {!completed && (
             <button className="secondary-button" onClick={() => setEditing(true)}>
               Edit
@@ -137,6 +145,13 @@ export const TaskCard = ({ task, categories, dragHandle, onChanged, completed = 
               rows={3}
             />
           </label>
+          <RecurrenceFields
+            value={{
+              recurrenceType: form.recurrenceType,
+              recurrenceDays: form.recurrenceDays
+            }}
+            onChange={(recurrence) => setForm({ ...form, ...recurrence })}
+          />
           <label>
             Category
             <select

@@ -32,13 +32,23 @@ export const createTaskSchema = z.object({
   title: z.string().trim().min(1).max(180),
   description: z.string().trim().max(5000).optional().default(""),
   categoryId: z.string().uuid().optional(),
-  newCategoryName: z.string().trim().min(1).max(80).optional()
+  newCategoryName: z.string().trim().min(1).max(80).optional(),
+  recurrenceType: z
+    .enum(["daily", "weekdays", "weekly", "monthly", "yearly", "biweekly", "custom"])
+    .nullable()
+    .optional(),
+  recurrenceDays: z.array(z.number().int().min(0).max(6)).max(7).optional().default([])
 });
 
 export const updateTaskSchema = z.object({
   title: z.string().trim().min(1).max(180).optional(),
   description: z.string().trim().max(5000).optional(),
-  categoryId: z.string().uuid().optional()
+  categoryId: z.string().uuid().optional(),
+  recurrenceType: z
+    .enum(["daily", "weekdays", "weekly", "monthly", "yearly", "biweekly", "custom"])
+    .nullable()
+    .optional(),
+  recurrenceDays: z.array(z.number().int().min(0).max(6)).max(7).optional()
 });
 
 export const reorderTasksSchema = z.object({
@@ -90,6 +100,10 @@ export type TaskDto = {
   priorityOrder: number;
   completed: boolean;
   completedAt: string | null;
+  recurrenceType: "daily" | "weekdays" | "weekly" | "monthly" | "yearly" | "biweekly" | "custom" | null;
+  recurrenceDays: number[];
+  recurrenceAnchor: string | null;
+  nextDueAt: string | null;
   createdAt: string;
   updatedAt: string;
 };
